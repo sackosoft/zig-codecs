@@ -4,8 +4,8 @@
 
 **High-performance encoding algorithms.**
 
-A comprehensive collection of encoding and compression algorithms for Zig. Useful, among other things, for implementing
-columnar storage formats.
+A collection of encoding and compression algorithms for Zig. Useful, among other things, for
+implementing columnar storage formats.
 
 ![GitHub License](https://img.shields.io/github/license/sackosoft/zig-codecs)
 
@@ -18,9 +18,9 @@ TODO: Capture attention with a visualization, diagram, demo or other visual plac
 
 ## Overview
 
-`zig-codecs` provides production-ready implementations of encoding algorithms commonly used in data serialization and to
-improve results from applying compression. The library emphasizes correctness, performance, and usability for developers
-building data-intensive applications.
+`zig-codecs` provides production-ready implementations of encoding algorithms commonly used in data
+serialization and to improve results from applying compression. The library emphasizes correctness,
+performance, and usability for developers building data-intensive applications.
 
 ### Supported Encodings
 
