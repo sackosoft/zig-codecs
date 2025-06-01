@@ -1,13 +1,13 @@
 <div align="center">
 
-# zig-bitops
+# zig-codecs
 
 **High-performance encoding algorithms.**
 
 A comprehensive collection of encoding and compression algorithms for Zig. Useful, among other things, for implementing
 columnar storage formats.
 
-![GitHub License](https://img.shields.io/github/license/sackosoft/zig-bitops)
+![GitHub License](https://img.shields.io/github/license/sackosoft/zig-codecs)
 
 <!--
 TODO: Capture attention with a visualization, diagram, demo or other visual placeholder here.
@@ -18,7 +18,7 @@ TODO: Capture attention with a visualization, diagram, demo or other visual plac
 
 ## Overview
 
-`zig-bitops` provides production-ready implementations of encoding algorithms commonly used in data serialization and to
+`zig-codecs` provides production-ready implementations of encoding algorithms commonly used in data serialization and to
 improve results from applying compression. The library emphasizes correctness, performance, and usability for developers
 building data-intensive applications.
 
@@ -44,17 +44,17 @@ building data-intensive applications.
 
 ```zig
 const std = @import("std");
-const bitops = @import("zig-bitops");
+const codecs = @import("zig-codecs");
 
 // Plain encoding example
 var buffer: [1024]u8 = undefined;
-var encoder = bitops.PlainEncoder.init(&buffer);
+var encoder = codecs.PlainEncoder.init(&buffer);
 
 const values = [_]i32{ 42, 1337, -123, 0 };
 try encoder.encodeInt32Slice(&values);
 
 // Delta encoding example  
-var delta_encoder = bitops.DeltaBinaryPackedEncoder.init(
+var delta_encoder = codecs.DeltaBinaryPackedEncoder.init(
     std.testing.allocator,
     128, // block size
     4,   // miniblocks per block
@@ -68,7 +68,7 @@ try delta_encoder.encode(&deltas);
 ## Project Structure
 
 ```
-zig-bitops/
+zig-codecs/
 ├── src/
 │   ├── encoders/           # Encoding implementations
 │   ├── decoders/           # Decoding implementations
@@ -140,7 +140,7 @@ Performance characteristics vary by data type and distribution. Delta encoding e
 
 ## License
 
-The algorithms, tests and other artifacts in `zig-bitops` are licensed under the MIT License:
+The algorithms, tests and other artifacts in `zig-codecs` are licensed under the MIT License:
 
 ```
 Copyright (c) 2025 Theodore Sackos
