@@ -15,16 +15,20 @@ pub fn Encoder(comptime T: type) type {
 test "Plain encoder writes integers in sequence" {
     // Arrange
     var buf: [8]u32 = undefined;
-    var fbs = std.io.fixedBufferStream(@as(*u8, @ptrCast(&buf)));
-    const writer = fbs.writer();
-    const encoder: Encoder(u32) = .{};
-    const given = &[_]u32{ 1, 2, 3 };
+    @memset(&buf, 0);
+    var fbs = std.io.fixedBufferStream(@as([*]u8, @ptrCast(&buf))[0 .. 8 * 8]);
+    const writer = fbs.writer().any();
+    var given = [_]?u32{ 1, 2, 3 };
+    var encoder: Encoder(u32) = .{};
 
     // Act
-    try encoder.encode(writer, given);
+    try encoder.encode(writer, &given);
 
     // Assert
-    for (given, 0..) |expected, i| {
+    try std.testing.expect(false);
+    for (0..given.len) |i| {
+        std.debug.print("JKLAJDLASJLD\n", .{});
+        const expected = given[i];
         const actual = std.mem.nativeToLittle(u32, buf[i]);
         try std.testing.expectEqual(expected, actual);
     }

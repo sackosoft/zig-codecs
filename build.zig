@@ -22,4 +22,15 @@ pub fn build(b: *std.Build) void {
         .root_module = core_module,
     });
     b.installArtifact(lib_encoders);
+
+    const test_step = b.step("test", "Run library tests");
+    const tests = [_][]const u8{"src/encoders/plain.zig"};
+    for (tests) |t| {
+        const module = b.addTest(.{
+            .root_source_file = b.path(t),
+            .target = target,
+            .optimize = optimize,
+        });
+        test_step.dependOn(&module.step);
+    }
 }
