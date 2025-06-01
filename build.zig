@@ -1,11 +1,5 @@
 const std = @import("std");
 
-const Encoder = struct {
-    name: []const u8,
-    path: []const u8,
-    module: ?*std.Build.Module,
-};
-
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
@@ -23,14 +17,13 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(lib_encoders);
 
+    const test_library = b.addTest(.{
+        .root_module = core_module,
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_lib_unit_tests = b.addRunArtifact(test_library);
+
     const test_step = b.step("test", "Run library tests");
-    const tests = [_][]const u8{"src/encoders/plain.zig"};
-    for (tests) |t| {
-        const module = b.addTest(.{
-            .root_source_file = b.path(t),
-            .target = target,
-            .optimize = optimize,
-        });
-        test_step.dependOn(&module.step);
-    }
+    test_step.dependOn(&run_lib_unit_tests.step);
 }
