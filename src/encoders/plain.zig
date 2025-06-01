@@ -1,13 +1,20 @@
 const std = @import("std");
+const builtin = @import("builtin");
+
+const native_endian = builtin.cpu.arch.endian();
 
 pub fn Encoder(comptime T: type) type {
     return struct {
         const Self = @This();
 
-        pub fn encode(self: *@This(), writer: std.io.AnyWriter, values: []?T) !void {
+        pub fn encode(self: *Self, writer: std.io.AnyWriter, values: []T) !void {
             _ = self;
-            _ = writer;
-            _ = values;
+
+            for (values) |v| {
+                const little = std.mem.nativeToLittle(T, v);
+                const bytes = std.mem.asBytes(&little);
+                try writer.writeAll(bytes);
+            }
         }
     };
 }
@@ -18,16 +25,14 @@ test "Plain encoder writes integers in sequence" {
     @memset(&buf, 0);
     var fbs = std.io.fixedBufferStream(@as([*]u8, @ptrCast(&buf))[0 .. 8 * 8]);
     const writer = fbs.writer().any();
-    var given = [_]?u32{ 1, 2, 3 };
+    var given = [_]u32{ 1, 2, 3 };
     var encoder: Encoder(u32) = .{};
 
     // Act
     try encoder.encode(writer, &given);
 
     // Assert
-    try std.testing.expect(false);
     for (0..given.len) |i| {
-        std.debug.print("JKLAJDLASJLD\n", .{});
         const expected = given[i];
         const actual = std.mem.nativeToLittle(u32, buf[i]);
         try std.testing.expectEqual(expected, actual);
