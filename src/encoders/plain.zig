@@ -8,6 +8,38 @@ pub fn Encoder(comptime T: type) type {
         const Self = @This();
 
         pub fn encode(self: *Self, writer: std.io.AnyWriter, values: []T) !void {
+            comptime {
+                switch (@typeInfo(T)) {
+                    .bool => {},
+                    .int => {},
+                    .float => {},
+                    .comptime_float => {},
+                    .comptime_int => {},
+
+                    .type,
+                    .void,
+                    .noreturn,
+                    .pointer,
+                    .array,
+                    .@"struct",
+                    .undefined,
+                    .null,
+                    .optional,
+                    .error_union,
+                    .error_set,
+                    .@"enum",
+                    .@"union",
+                    .@"fn",
+                    .@"opaque",
+                    .frame,
+                    .@"anyframe",
+                    .vector,
+                    .enum_literal,
+                    => {
+                        @compileError("Unsupported type for Encoder: " ++ @typeName(T));
+                    },
+                }
+            }
             _ = self;
 
             for (values) |v| {
